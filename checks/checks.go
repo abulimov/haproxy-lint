@@ -1,6 +1,6 @@
 package checks
 
-import "github.com/abulimov/haproxy-linter/lib"
+import "github.com/abulimov/haproxy-lint/lib"
 
 func Run(sections []*lib.Section) []lib.Problem {
 	var sectionChecks = []lib.SectionCheck{

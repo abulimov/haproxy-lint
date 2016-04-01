@@ -3,18 +3,29 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 
-	"github.com/abulimov/haproxy-linter/checks"
-	"github.com/abulimov/haproxy-linter/lib"
+	"github.com/abulimov/haproxy-lint/checks"
+	"github.com/abulimov/haproxy-lint/lib"
 )
 
+func myUsage() {
+	fmt.Printf("Usage: %s [OPTIONS] haproxy.cfg\n", os.Args[0])
+	flag.PrintDefaults()
+}
+
 func main() {
-	argFile := flag.String("file", "haproxy.cfg", "file to check")
 	argJSON := flag.Bool("json", false, "Output in json")
+	flag.Usage = myUsage
 
 	flag.Parse()
+	if len(flag.Args()) == 0 {
+		flag.Usage()
+		os.Exit(1)
+	}
+	filePath := flag.Args()[0]
 
-	config, err := lib.ReadConfigFile(*argFile)
+	config, err := lib.ReadConfigFile(filePath)
 	if err != nil {
 		fmt.Println(err)
 	}

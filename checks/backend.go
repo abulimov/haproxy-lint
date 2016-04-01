@@ -3,7 +3,7 @@ package checks
 import (
 	"fmt"
 
-	"github.com/abulimov/haproxy-linter/lib"
+	"github.com/abulimov/haproxy-lint/lib"
 )
 
 func CheckUnusedBackends(sections []*lib.Section) []lib.Problem {

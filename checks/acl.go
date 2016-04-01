@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/abulimov/haproxy-linter/lib"
+	"github.com/abulimov/haproxy-lint/lib"
 )
 
 func CheckUnusedACL(s *lib.Section) []lib.Problem {
