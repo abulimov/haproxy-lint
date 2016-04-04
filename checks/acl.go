@@ -8,6 +8,7 @@ import (
 	"github.com/abulimov/haproxy-lint/lib"
 )
 
+// CheckUnusedACL checks if we have ACLs that are defined but not used
 func CheckUnusedACL(s *lib.Section) []lib.Problem {
 	var problems []lib.Problem
 	ACLs := make(map[lib.Entity]bool)
@@ -98,6 +99,7 @@ func isInlineACL(acl string) bool {
 	return re.MatchString(acl)
 }
 
+// CheckUnknownACLs checks if we have ACLs that are used in config but not defined
 func CheckUnknownACLs(s *lib.Section) []lib.Problem {
 	var problems []lib.Problem
 	ACLs := make(map[string]bool)

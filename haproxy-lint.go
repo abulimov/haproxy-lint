@@ -28,13 +28,10 @@ func main() {
 	config, err := lib.ReadConfigFile(filePath)
 	if err != nil {
 		fmt.Println(err)
+		os.Exit(1)
 	}
-	var sections []*lib.Section
 
-	for _, s := range lib.Sections {
-		ps := lib.GetSection(s, config)
-		sections = append(sections, ps...)
-	}
+	sections := lib.GetSections(config)
 
 	problems := checks.Run(sections)
 

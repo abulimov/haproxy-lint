@@ -63,6 +63,7 @@ func GetSection(section string, lines []string) []*Section {
 	var current *Section
 
 	for i, line := range lines {
+		line := strings.TrimSpace(line)
 		if isSectionDelimiter(line) {
 			// if we have already started grabbing content,
 			// we need to stop
@@ -87,6 +88,16 @@ func GetSection(section string, lines []string) []*Section {
 	}
 	if start {
 		result = append(result, current)
+	}
+	return result
+}
+
+func GetSections(lines []string) []*Section {
+	var result []*Section
+
+	for _, s := range Sections {
+		ps := GetSection(s, lines)
+		result = append(result, ps...)
 	}
 	return result
 }
