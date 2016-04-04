@@ -2,6 +2,7 @@ package checks
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/abulimov/haproxy-lint/lib"
@@ -47,5 +48,86 @@ func getACL(l string) string {
 }
 
 func usesACL(acl, line string) bool {
-	return strings.Contains(line, acl)
+	return strings.Contains(lib.StripComments(line), acl)
+}
+
+func getUsedACLs(line string) []string {
+	preDefinedACLs := map[string]bool{
+		"FALSE":          true,
+		"HTTP":           true,
+		"HTTP_1.0":       true,
+		"HTTP_1.1":       true,
+		"HTTP_CONTENT":   true,
+		"HTTP_URL_ABS":   true,
+		"HTTP_URL_SLASH": true,
+		"HTTP_URL_STAR":  true,
+		"LOCALHOST":      true,
+		"METH_CONNECT":   true,
+		"METH_GET":       true,
+		"METH_HEAD":      true,
+		"METH_OPTIONS":   true,
+		"METH_POST":      true,
+		"METH_TRACE":     true,
+		"RDP_COOKIE":     true,
+		"REQ_CONTENT":    true,
+		"TRUE":           true,
+		"WAIT_END":       true,
+	}
+	var acls []string
+	var rawACLs []string
+	afterIfRE := regexp.MustCompile(`\s+if\s+(.+)`)
+	afterIfMatch := afterIfRE.FindAllStringSubmatch(lib.StripComments(line), -1)
+	if len(afterIfMatch) > 0 {
+		if len(afterIfMatch[0]) > 1 {
+			afterIfString := afterIfMatch[0][1]
+			word := regexp.MustCompile(`({[^}]+}|\w+)`)
+			rawACLs = word.FindAllString(afterIfString, -1)
+		}
+	}
+	for _, acl := range rawACLs {
+		_, preDefined := preDefinedACLs[acl]
+		if acl != "or" && !preDefined {
+			acls = append(acls, acl)
+		}
+	}
+	return acls
+}
+
+func isInlineACL(acl string) bool {
+	re := regexp.MustCompile(`!?{[^}]+}`)
+	return re.MatchString(acl)
+}
+
+func CheckUnknownACLs(s *lib.Section) []lib.Problem {
+	var problems []lib.Problem
+	ACLs := make(map[string]bool)
+	var otherLines []int
+	for i, line := range s.Content {
+		acl := getACL(line)
+		if acl != "" {
+			ACLs[acl] = false
+		} else {
+			otherLines = append(otherLines, i)
+		}
+	}
+	for _, i := range otherLines {
+		usedACLs := getUsedACLs(s.Content[i])
+		for _, acl := range usedACLs {
+			if !isInlineACL(acl) {
+				if _, found := ACLs[acl]; !found {
+					problems = append(
+						problems,
+						lib.Problem{
+							Line:     i,
+							Col:      0,
+							Severity: "critical",
+							Message:  fmt.Sprintf("ACL %s used but not declared", acl),
+						},
+					)
+				}
+			}
+		}
+
+	}
+	return problems
 }
