@@ -82,6 +82,16 @@ func TestGetUsedACLs(t *testing.T) {
 			line: "redirect scheme https code 301 if METH_GET or h_missing",
 			want: []string{"h_missing"},
 		},
+		{
+			name: "short usage",
+			line: "block if some_acl",
+			want: []string{"some_acl"},
+		},
+		{
+			name: "Jinja-template if",
+			line: "{% if something == 'other' %}",
+			want: []string(nil),
+		},
 	}
 	for _, tt := range tests {
 		if got := getUsedACLs(tt.line); !reflect.DeepEqual(got, tt.want) {

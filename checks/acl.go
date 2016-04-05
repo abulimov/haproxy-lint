@@ -76,7 +76,7 @@ func getUsedACLs(line string) []string {
 	}
 	var acls []string
 	var rawACLs []string
-	afterIfRE := regexp.MustCompile(`\s+if\s+(.+)`)
+	afterIfRE := regexp.MustCompile(`\w+\s+if\s+(.+)`)
 	afterIfMatch := afterIfRE.FindAllStringSubmatch(lib.StripComments(line), -1)
 	if len(afterIfMatch) > 0 {
 		if len(afterIfMatch[0]) > 1 {
