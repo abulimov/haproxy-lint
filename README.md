@@ -2,10 +2,6 @@
 
 Simple linter for [HAProxy](http://haproxy.org) configuration.
 
-## WIP
-
-**This tool is work-in-progress, things can break!**
-
 ## Installation
 
 Tested against Go 1.5+
@@ -56,7 +52,15 @@ $ haproxy-lint --json /etc/haproxy/haproxy.cfg
 ]
 ```
 
-## Lint
+## Rules
+
+| #   | Severity | Rule                          |
+|-----|----------|-------------------------------|
+| 001 | critical | backend used but not declared |
+| 002 | warning  | backend declared but not used |
+| 003 | warning  | acl declared but not used     |
+| 004 | critical | acl used but not declared     |
+
 
 ## License
 

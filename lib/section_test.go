@@ -1,9 +1,6 @@
 package lib
 
-import (
-	"reflect"
-	"testing"
-)
+import "testing"
 
 func TestStripComments(t *testing.T) {
 	tests := []struct {
@@ -100,25 +97,6 @@ func TestIsSectionDelimiter(t *testing.T) {
 	}
 }
 
-func TestIsSection(t *testing.T) {
-	tests := []struct {
-		// Test description.
-		name string
-		// Parameters.
-		s       string
-		section string
-		// Expected results.
-		want bool
-	}{
-	// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		if got := isSection(tt.s, tt.section); got != tt.want {
-			t.Errorf("%q. isSection() = %v, want %v", tt.name, got, tt.want)
-		}
-	}
-}
-
 func TestGetSectionName(t *testing.T) {
 	tests := []struct {
 		// Test description.
@@ -128,7 +106,21 @@ func TestGetSectionName(t *testing.T) {
 		// Expected results.
 		want string
 	}{
-	// TODO: Add test cases.
+		{
+			name: "Normal name",
+			s:    "frontend https-in",
+			want: "https-in",
+		},
+		{
+			name: "Listen section",
+			s:    "listen 127.0.0.1:8000",
+			want: "127.0.0.1:8000",
+		},
+		{
+			name: "No section name",
+			s:    "global",
+			want: "",
+		},
 	}
 	for _, tt := range tests {
 		if got := getSectionName(tt.s); got != tt.want {
@@ -138,38 +130,25 @@ func TestGetSectionName(t *testing.T) {
 }
 
 func TestGetSection(t *testing.T) {
-	tests := []struct {
-		// Test description.
-		name string
-		// Parameters.
-		section string
-		lines   []string
-		// Expected results.
-		want []*Section
-	}{
-	// TODO: Add test cases.
+	lines, err := ReadConfigFile("../testdata/haproxy.cfg")
+	if err != nil {
+		t.Fatalf("Failed to read test data: %v", err)
 	}
-	for _, tt := range tests {
-		if got := GetSection(tt.section, tt.lines); !reflect.DeepEqual(got, tt.want) {
-			t.Errorf("%q. GetSection() = %v, want %v", tt.name, got, tt.want)
-		}
+	sections := GetSection("frontend", lines)
+
+	if len(sections) != 2 {
+		t.Errorf("Expected %d sections, got %d", 2, len(sections))
 	}
 }
 
 func TestGetSections(t *testing.T) {
-	tests := []struct {
-		// Test description.
-		name string
-		// Parameters.
-		lines []string
-		// Expected results.
-		want []*Section
-	}{
-	// TODO: Add test cases.
+	lines, err := ReadConfigFile("../testdata/haproxy.cfg")
+	if err != nil {
+		t.Fatalf("Failed to read test data: %v", err)
 	}
-	for _, tt := range tests {
-		if got := GetSections(tt.lines); !reflect.DeepEqual(got, tt.want) {
-			t.Errorf("%q. GetSections() = %v, want %v", tt.name, got, tt.want)
-		}
+	sections := GetSections(lines)
+
+	if len(sections) != 7 {
+		t.Errorf("Expected %d sections, got %d", 7, len(sections))
 	}
 }

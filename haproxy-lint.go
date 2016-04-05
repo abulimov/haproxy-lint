@@ -9,6 +9,8 @@ import (
 	"github.com/abulimov/haproxy-lint/lib"
 )
 
+var version = "0.1.0"
+
 func myUsage() {
 	fmt.Printf("Usage: %s [OPTIONS] haproxy.cfg\n", os.Args[0])
 	flag.PrintDefaults()
@@ -16,9 +18,16 @@ func myUsage() {
 
 func main() {
 	argJSON := flag.Bool("json", false, "Output in json")
+	versionFlag := flag.Bool("version", false, "print haproxy-lint version and exit")
+
 	flag.Usage = myUsage
 
 	flag.Parse()
+	if *versionFlag {
+		fmt.Printf("haproxy-lint version %s\n", version)
+		os.Exit(0)
+	}
+
 	if len(flag.Args()) == 0 {
 		flag.Usage()
 		os.Exit(1)
