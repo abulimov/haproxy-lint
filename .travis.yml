@@ -1,9 +1,21 @@
 language: go
-
 go:
   - 1.5
   - 1.6
   - tip
-
 notifications:
   email: false
+before_deploy:
+  - make release
+deploy:
+  provider: releases
+  api_key:
+    secure: SdxwPXYq4mMYNJLMcYxSexAO3woYDYGDh0az2mZMwas6guaax3YyBT+PcTt1DcYKJXGlSNOOED9qLAp8BE+M+ehRVUMNs5Kp+i+gnMh0izvLTpmVW19sMpPvGiueL181FHwgiRuGetQGxxCiPuoZVwnhVsXRWhita9wQ6570HPLzRiDyCQd07/2WV4ogQD82axBQjBByYGJtEwwndmvEIuQb4RqjzDWYEoTh8pgD24RxvYcvbx3WXOmy6GSHf6oeDg+Zira1HZK3tuPZ1JogApuI/vfUF8CglTc6D1wac/HtrYPgoNmJMLbgiPYcjtF04X1mUTjU/Yb5WfzIedJMBaNsFWN7nq4xo8XmS3YLniHtv410ZwlLZxa2fiB2+1844GElLF7/hAgDj9tyFHwG7V7Rynz2nrryuxd0VcqhcinpQVvQKB0tQXRHKkGuxkUigeZjutn1li4eo9ZuAqr1Pz6RPYWey5yeDugxyEXYDzWH/xivFboihsSlmzYeWfEYTGENsQNqclHDrjp7FFMUrDVfy4ZVQ8k6wdsdc5fJnjI8aH+m6cFwP9QFg7Vy7MOXFkm8B+0MocVzHNKz05kgtvWE7mYu0RTDbgamYpueyyHDtLsjSSAqzhXzBpyGjcgGYFIuDf5wRkSgushLB54KjHOOMYJrOkz29FFcTKhK9t0=
+  file:
+    - release/haproxy-lint.darwin-amd64.zip
+    - release/haproxy-lint.linux-amd64.zip
+    - release/haproxy-lint.linux-arm.zip
+  on:
+    repo: abulimov/haproxy-lint
+    tags: true
+    go: 1.6

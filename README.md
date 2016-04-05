@@ -6,6 +6,12 @@ Simple linter for [HAProxy](http://haproxy.org) configuration.
 
 ## Installation
 
+Grab latest release on [releases page](https://github.com/abulimov/haproxy-lint/releases),
+or build from source.
+
+### Building from source
+
+You need working Go compiler.
 Tested against Go 1.5+
 
 On Linux/OSX:
