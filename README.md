@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/abulimov/haproxy-lint.svg?branch=master)](https://travis-ci.org/abulimov/haproxy-lint)
+
 # haproxy-lint
 
 Simple linter for [HAProxy](http://haproxy.org) configuration.
