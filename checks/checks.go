@@ -6,6 +6,7 @@ func Run(sections []*lib.Section) []lib.Problem {
 	var sectionChecks = []lib.SectionCheck{
 		CheckUnusedACL,
 		CheckUnknownACLs,
+		CheckPrecedence,
 	}
 	var globalChecks = []lib.GlobalCheck{
 		CheckUnusedBackends,

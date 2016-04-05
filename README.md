@@ -62,12 +62,13 @@ $ haproxy-lint --json /etc/haproxy/haproxy.cfg
 
 ## Rules
 
-| #   | Severity | Rule                          |
-|-----|----------|-------------------------------|
-| 001 | critical | backend used but not declared |
-| 002 | warning  | backend declared but not used |
-| 003 | warning  | acl declared but not used     |
-| 004 | critical | acl used but not declared     |
+| #   | Severity | Rule                                          |
+|-----|----------|-----------------------------------------------|
+| 001 | critical | backend used but not declared                 |
+| 002 | warning  | backend declared but not used                 |
+| 003 | warning  | acl declared but not used                     |
+| 004 | critical | acl used but not declared                     |
+| 005 | warning  | rule order masking real evaluation precedence |
 
 
 ## License
