@@ -24,7 +24,7 @@ func StripComments(s string) string {
 	// strip comments
 	re := regexp.MustCompile("#.*")
 	replaced := re.ReplaceAllString(s, "")
-	return replaced
+	return strings.TrimSpace(replaced)
 }
 
 func stringInSlice(needle string, slice []string) bool {

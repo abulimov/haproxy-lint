@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Added duplicate lines check
 - Added rules precedence check
 
 ## v0.1.0 [2016-04-05]

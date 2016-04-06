@@ -19,7 +19,7 @@ func TestStripComments(t *testing.T) {
 		{
 			name: "String with comment",
 			s:    "acl h_some hdr(Host) -i some.example.com # comment",
-			want: "acl h_some hdr(Host) -i some.example.com ",
+			want: "acl h_some hdr(Host) -i some.example.com",
 		},
 		{
 			name: "Just comment",
