@@ -7,15 +7,30 @@ import (
 	"github.com/abulimov/haproxy-lint/lib"
 )
 
-// CheckPrecedence checks if we have wrong ordered rules in our section
+// CheckPrecedence checks if we have wrong ordered rules in our section.
+// Based on https://raw.githubusercontent.com/tmm1/haproxy-dev/master/src/cfgparse.c
+// rules warnif_misplaced_reqadd/warnif_misplaced_reqxxx/warnif_misplaced_block.
 func CheckPrecedence(s *lib.Section) []lib.Problem {
 	keywordsMap := map[string]int{
 		"http-request": 1,
-		"reqrep":       1,
-		"reqirep":      1,
-		"redirect":     2,
-		"use-server":   3,
-		"use_backend":  3,
+		"reqrep":       2,
+		"reqirep":      2,
+		"reqdel":       2,
+		"reqidel":      2,
+		"reqdeny":      2,
+		"reqideny":     2,
+		"reqpass":      2,
+		"reqipass":     2,
+		"reqallow":     2,
+		"reqiallow":    2,
+		"reqtarpit":    2,
+		"reqitarpit":   2,
+		"reqsetbe":     2,
+		"reqisetbe":    2,
+		"reqadd":       3,
+		"redirect":     4,
+		"use-server":   5,
+		"use_backend":  5,
 	}
 	var problems []lib.Problem
 	var lineNums []int
