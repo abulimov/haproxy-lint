@@ -3,6 +3,7 @@ package checks
 import (
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/abulimov/haproxy-lint/lib"
 )
@@ -18,8 +19,9 @@ func CheckDuplicates(s *lib.Section) []lib.Problem {
 	sort.Ints(lineNums)
 	for _, i := range lineNums {
 		trimmed := lib.StripComments(s.Content[i])
-		if trimmed != "" {
-			prev, found := seen[trimmed]
+		normalized := strings.Join(strings.Fields(trimmed), " ")
+		if normalized != "" {
+			prev, found := seen[normalized]
 			if found {
 				problems = append(
 					problems,
