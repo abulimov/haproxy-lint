@@ -1,3 +1,7 @@
+## Unreleased
+
+- Added deprecated rules check
+
 ## v0.2.1 [2016-04-07]
 
 - Fixed duplicated rules recognition

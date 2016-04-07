@@ -2,12 +2,14 @@ package checks
 
 import "github.com/abulimov/haproxy-lint/lib"
 
+// Run runs all checks on Sections
 func Run(sections []*lib.Section) []lib.Problem {
 	var sectionChecks = []lib.SectionCheck{
 		CheckUnusedACL,
 		CheckUnknownACLs,
 		CheckPrecedence,
 		CheckDuplicates,
+		CheckDeprecations,
 	}
 	var globalChecks = []lib.GlobalCheck{
 		CheckUnusedBackends,
