@@ -14,11 +14,11 @@ get:
 release:
 	mkdir -p release
 	GOOS=linux GOARCH=amd64 go build -o haproxy-lint $(REPO)
-	zip -0 release/haproxy-lint.linux-amd64.zip  haproxy-lint
+	zip -6 release/haproxy-lint.linux-amd64.zip  haproxy-lint
 	GOOS=linux GOARCH=arm go build -o haproxy-lint $(REPO)
-	zip -0 release/haproxy-lint.linux-arm.zip  haproxy-lint
+	zip -6 release/haproxy-lint.linux-arm.zip  haproxy-lint
 	GOOS=darwin GOARCH=amd64 go build -o haproxy-lint $(REPO)
-	zip -0 release/haproxy-lint.darwin-amd64.zip  haproxy-lint
+	zip -6 release/haproxy-lint.darwin-amd64.zip  haproxy-lint
 
 build: get
 	go build $(GOFLAGS) $(REPO)

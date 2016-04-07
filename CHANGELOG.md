@@ -1,3 +1,8 @@
+## v0.2.1 [2016-04-07]
+
+- Fixed duplicated rules recognition
+- Small fixes and style changes
+
 ## v0.2.0 [2016-04-06]
 
 - Added duplicate lines check

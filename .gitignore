@@ -2,7 +2,7 @@
 .idea
 
 # built executable
-haproxy-linter
+haproxy-lint
 
 # releases
 release

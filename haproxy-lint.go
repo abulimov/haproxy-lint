@@ -9,7 +9,7 @@ import (
 	"github.com/abulimov/haproxy-lint/lib"
 )
 
-var version = "0.2.0"
+var version = "0.2.1"
 
 func myUsage() {
 	fmt.Printf("Usage: %s [OPTIONS] haproxy.cfg\n", os.Args[0])
