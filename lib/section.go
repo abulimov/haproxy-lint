@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// Sections is a list of all possible section names in HAProxy config
 var Sections = [...]string{
 	"global",
 	"defaults",
@@ -13,6 +14,7 @@ var Sections = [...]string{
 	"backend",
 }
 
+// Section is a section in HAProxy config file (for example, 'frontend')
 type Section struct {
 	Type    string
 	Name    string
@@ -20,20 +22,12 @@ type Section struct {
 	Content map[int]string
 }
 
+// StripComments returns string without comments and extra spaces
 func StripComments(s string) string {
 	// strip comments
 	re := regexp.MustCompile("#.*")
 	replaced := re.ReplaceAllString(s, "")
 	return strings.TrimSpace(replaced)
-}
-
-func stringInSlice(needle string, slice []string) bool {
-	for _, s := range slice {
-		if needle == s {
-			return true
-		}
-	}
-	return false
 }
 
 func isSectionDelimiter(s string) bool {
@@ -57,6 +51,7 @@ func getSectionName(s string) string {
 	return ""
 }
 
+// GetSection constructs Section from slice of lines
 func GetSection(section string, lines []string) []*Section {
 	var result []*Section
 	start := false
@@ -92,6 +87,7 @@ func GetSection(section string, lines []string) []*Section {
 	return result
 }
 
+// GetSections returns all Sections from slice of config file lines
 func GetSections(lines []string) []*Section {
 	var result []*Section
 

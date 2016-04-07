@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// ReadConfig returns slice of lines in io.Reader
 func ReadConfig(f io.Reader) ([]string, error) {
 	b, err := ioutil.ReadAll(f)
 	if err != nil {
@@ -15,6 +16,7 @@ func ReadConfig(f io.Reader) ([]string, error) {
 	return strings.Split(string(b), "\n"), nil
 }
 
+// ReadConfigFile returns slice of lines in config file
 func ReadConfigFile(filePath string) ([]string, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
@@ -24,12 +26,14 @@ func ReadConfigFile(filePath string) ([]string, error) {
 	return ReadConfig(f)
 }
 
+// GetUsage returns name of used rule, or "" if line does not contain rule
 func GetUsage(keyword, line string) string {
 	trimmed := strings.TrimSpace(line)
 	if strings.HasPrefix(trimmed, keyword) {
-		splitted := strings.Fields(trimmed)
-		if len(splitted) > 1 {
-			return splitted[1]
+		rest := strings.TrimPrefix(trimmed, keyword)
+		splitted := strings.Fields(rest)
+		if len(splitted) > 0 {
+			return splitted[0]
 		}
 	}
 	return ""

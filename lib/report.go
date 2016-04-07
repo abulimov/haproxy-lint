@@ -6,6 +6,7 @@ import (
 	"fmt"
 )
 
+// ReportProblems returns all found problems as pretty string
 func ReportProblems(problems []Problem) string {
 	buffer := new(bytes.Buffer)
 	for _, p := range problems {
@@ -14,6 +15,7 @@ func ReportProblems(problems []Problem) string {
 	return buffer.String()
 }
 
+//ReportProblemsJSON returns all found problems as pretty JSON string
 func ReportProblemsJSON(problems []Problem) string {
 	s, err := json.MarshalIndent(problems, "", "  ")
 	if err != nil {

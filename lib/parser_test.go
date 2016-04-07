@@ -25,6 +25,12 @@ func TestGetUsage(t *testing.T) {
 			want:    "",
 		},
 		{
+			name:    "Double keyword usage",
+			keyword: "http-response set-header",
+			line:    "http-response set-header Cache-Control max-age=300,must-revalidate",
+			want:    "Cache-Control",
+		},
+		{
 			name:    "Bad acl line",
 			keyword: "acl",
 			line:    "acl",

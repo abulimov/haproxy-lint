@@ -34,42 +34,6 @@ func TestStripComments(t *testing.T) {
 	}
 }
 
-func TestStringInSlice(t *testing.T) {
-	tests := []struct {
-		// Test description.
-		name string
-		// Parameters.
-		needle string
-		slice  []string
-		// Expected results.
-		want bool
-	}{
-		{
-			name:   "string in slice",
-			needle: "needle",
-			slice:  []string{"some", "long", "needle", "ok"},
-			want:   true,
-		},
-		{
-			name:   "no string in slice",
-			needle: "needle",
-			slice:  []string{"some", "long", "sfneedle", "ok"},
-			want:   false,
-		},
-		{
-			name:   "empty slice",
-			needle: "needle",
-			slice:  []string{},
-			want:   false,
-		},
-	}
-	for _, tt := range tests {
-		if got := stringInSlice(tt.needle, tt.slice); got != tt.want {
-			t.Errorf("%q. stringInSlice() = %v, want %v", tt.name, got, tt.want)
-		}
-	}
-}
-
 func TestIsSectionDelimiter(t *testing.T) {
 	tests := []struct {
 		// Test description.
