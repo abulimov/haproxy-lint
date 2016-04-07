@@ -1,6 +1,7 @@
 ## Unreleased
 
 - Added deprecated rules check
+- Fixed parser GetUsage for 'no option'
 
 ## v0.2.1 [2016-04-07]
 

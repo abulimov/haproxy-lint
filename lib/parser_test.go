@@ -31,6 +31,12 @@ func TestGetUsage(t *testing.T) {
 			want:    "Cache-Control",
 		},
 		{
+			name:    "no option usage",
+			keyword: "option",
+			line:    "no option abortonclose",
+			want:    "abortonclose",
+		},
+		{
 			name:    "Bad acl line",
 			keyword: "acl",
 			line:    "acl",

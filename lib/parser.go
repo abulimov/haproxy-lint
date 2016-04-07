@@ -29,6 +29,9 @@ func ReadConfigFile(filePath string) ([]string, error) {
 // GetUsage returns name of used rule, or "" if line does not contain rule
 func GetUsage(keyword, line string) string {
 	trimmed := strings.TrimSpace(line)
+	if strings.HasPrefix(trimmed, "no ") {
+		trimmed = strings.TrimSpace(strings.TrimPrefix(trimmed, "no "))
+	}
 	if strings.HasPrefix(trimmed, keyword) {
 		rest := strings.TrimPrefix(trimmed, keyword)
 		splitted := strings.Fields(rest)
