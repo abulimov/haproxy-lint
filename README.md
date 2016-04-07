@@ -74,6 +74,7 @@ $ haproxy-lint --json /etc/haproxy/haproxy.cfg
 | 004 | critical | acl used but not declared                     |
 | 005 | warning  | rule order masking real evaluation precedence |
 | 006 | warning  | duplicate rules found                         |
+| 007 | warning  | deprecated keywords found                     |
 
 
 ## License
