@@ -4,6 +4,10 @@
 
 Simple linter for [HAProxy](http://haproxy.org) configuration.
 
+## Editor plugins
+
+There is official [Atom](http://atom.io) plugin - [linter-haproxy](https://atom.io/packages/linter-haproxy).
+
 ## Installation
 
 Grab latest release on [releases page](https://github.com/abulimov/haproxy-lint/releases),
