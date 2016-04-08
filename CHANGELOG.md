@@ -1,3 +1,8 @@
+## v0.4.0 [2016-04-08]
+
+- Execute checks in parallel
+- More tests
+
 ## v0.3.0 [2016-04-08]
 
 - Added deprecated rules check

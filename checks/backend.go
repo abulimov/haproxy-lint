@@ -6,6 +6,7 @@ import (
 	"github.com/abulimov/haproxy-lint/lib"
 )
 
+// CheckUnusedBackends checks if we have declared but not used backends
 func CheckUnusedBackends(sections []*lib.Section) []lib.Problem {
 	var problems []lib.Problem
 	backends := make(map[lib.Entity]bool)
