@@ -1,7 +1,8 @@
-## Unreleased
+## v0.3.0 [2016-04-08]
 
 - Added deprecated rules check
 - Fixed parser GetUsage for 'no option'
+- Added ability to run HAProxy binary in check mode and return parsed warnings
 
 ## v0.2.1 [2016-04-07]
 

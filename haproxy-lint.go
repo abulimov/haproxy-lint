@@ -3,13 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/abulimov/haproxy-lint/checks"
 	"github.com/abulimov/haproxy-lint/lib"
 )
 
-var version = "0.2.1"
+var version = "0.3.0"
 
 func myUsage() {
 	fmt.Printf("Usage: %s [OPTIONS] haproxy.cfg\n", os.Args[0])
@@ -17,7 +18,8 @@ func myUsage() {
 }
 
 func main() {
-	argJSON := flag.Bool("json", false, "Output in json")
+	jsonFlag := flag.Bool("json", false, "Output in json")
+	haproxyFlag := flag.Bool("run-haproxy", true, "Try to run HAProxy binary in check mode")
 	versionFlag := flag.Bool("version", false, "print haproxy-lint version and exit")
 
 	flag.Usage = myUsage
@@ -34,18 +36,33 @@ func main() {
 	}
 	filePath := flag.Args()[0]
 
+	var problems []lib.Problem
+	useHAProxy := *haproxyFlag
+	if useHAProxy {
+		haproxyProblems, err := lib.RunHAProxyCheck(filePath)
+		if err != nil {
+			log.Println(err)
+			useHAProxy = false
+		} else {
+			problems = append(problems, haproxyProblems...)
+		}
+	}
+
 	config, err := lib.ReadConfigFile(filePath)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	sections := lib.GetSections(config)
 
-	problems := checks.Run(sections)
+	// if we have local haproxy executable we shouldn't run
+	// checks that are implemented in haproxy itself.
+	nativeProblems := checks.Run(sections, useHAProxy)
+
+	problems = append(problems, nativeProblems...)
 
 	if len(problems) != 0 {
-		if *argJSON {
+		if *jsonFlag {
 			fmt.Println(lib.ReportProblemsJSON(problems))
 		} else {
 			fmt.Print(lib.ReportProblems(problems))

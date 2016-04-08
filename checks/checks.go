@@ -3,26 +3,42 @@ package checks
 import "github.com/abulimov/haproxy-lint/lib"
 
 // Run runs all checks on Sections
-func Run(sections []*lib.Section) []lib.Problem {
-	var sectionChecks = []lib.SectionCheck{
-		CheckUnusedACL,
-		CheckUnknownACLs,
-		CheckPrecedence,
-		CheckDuplicates,
-		CheckDeprecations,
+func Run(sections []*lib.Section, extrasOnly bool) []lib.Problem {
+	type secCheck struct {
+		f lib.SectionCheck
+		// extra indicates that this check is not implemented in HAProxy binary
+		extra bool
 	}
-	var globalChecks = []lib.GlobalCheck{
-		CheckUnusedBackends,
-		CheckUnknownBackends,
+	type globCheck struct {
+		f lib.GlobalCheck
+		// extra indicates that this check is not implemented in HAProxy binary
+		extra bool
+	}
+	var sectionChecks = []secCheck{
+		{CheckUnusedACL, true},
+		{CheckUnknownACLs, false},
+		{CheckPrecedence, false},
+		{CheckDuplicates, true},
+		{CheckDeprecations, false},
+	}
+	var globalChecks = []globCheck{
+		{CheckUnusedBackends, true},
+		// while check for unknown backend is implemented in HAProxy,
+		// alert message for it doesn't show the line with backend usage
+		{CheckUnknownBackends, true},
 	}
 	var problems []lib.Problem
 	for _, s := range sections {
 		for _, r := range sectionChecks {
-			problems = append(problems, r(s)...)
+			if !extrasOnly || r.extra {
+				problems = append(problems, r.f(s)...)
+			}
 		}
 	}
 	for _, r := range globalChecks {
-		problems = append(problems, r(sections)...)
+		if !extrasOnly || r.extra {
+			problems = append(problems, r.f(sections)...)
+		}
 	}
 	return problems
 }
