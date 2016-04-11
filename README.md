@@ -7,6 +7,7 @@ Simple linter for [HAProxy](http://haproxy.org) configuration.
 ## Editor plugins
 
 There is official [Atom](http://atom.io) plugin - [linter-haproxy](https://atom.io/packages/linter-haproxy).
+Any other editor can be simply integrated using linter's JSON output.
 
 ## Installation
 
@@ -74,8 +75,8 @@ haproxy-lint --json /etc/haproxy/haproxy.cfg
 ## HAProxy check mode
 
 In case if you have locally installed HAProxy,
-it gets run with `-c` flag to check specified file,
-and it's output gets parsed and returned as a linter warning.
+it gets run by this linter with `-c` flag to check specified file,
+and it's output is parsed and returned as a linter warning.
 
 If locally installed HAProxy is found, some of Native rules does not get
 executed, as they just duplicate HAProxy's own checks.
@@ -91,6 +92,10 @@ executed, as they just duplicate HAProxy's own checks.
 | 005 | warning  | rule order masking real evaluation precedence | no                            |
 | 006 | warning  | duplicate rules found                         | yes                           |
 | 007 | warning  | deprecated keywords found                     | no                            |
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://github.com/abulimov/haproxy-lint/blob/master/CONTRIBUTING.md) if you wish to contribute.
 
 ## License
 
