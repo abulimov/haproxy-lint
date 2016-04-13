@@ -1,4 +1,7 @@
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/abulimov/haproxy-lint/blob/master/LICENSE)
+[![GoDoc](https://godoc.org/github.com/abulimov/haproxy-lint?status.svg)](https://godoc.org/github.com/abulimov/haproxy-lint)
 [![Build Status](https://travis-ci.org/abulimov/haproxy-lint.svg?branch=master)](https://travis-ci.org/abulimov/haproxy-lint)
+[![codebeat badge](https://codebeat.co/badges/e0d63bd4-1557-440d-91b2-4c5fa32ced2a)](https://codebeat.co/projects/github-com-abulimov-haproxy-lint)
 
 # haproxy-lint
 

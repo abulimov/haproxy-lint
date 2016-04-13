@@ -1,3 +1,4 @@
+// Package checks contains all checks we can run agains HAProxy config
 package checks
 
 import "github.com/abulimov/haproxy-lint/lib"

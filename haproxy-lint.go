@@ -1,3 +1,19 @@
+// Simple linter for HAProxy configuration.
+//
+// This tool can perform static analysis of HAProxy config.
+//
+// Usage:
+//
+//   $ haproxy-lint [options] FILE
+//
+// Available options:
+//
+//   -json          output found problems in JSON format
+//
+//   -run-haproxy   run haproxy binary in check mode and parse
+//                  its output to extract alerts and warnigns
+//
+//   -v             show version and exit
 package main
 
 import (

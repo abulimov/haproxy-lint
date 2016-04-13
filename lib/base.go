@@ -1,3 +1,4 @@
+// Package lib contains core logic for performing checks on HAProxy config
 package lib
 
 // Problem is a struct desctibing typical problem our linter can find
