@@ -13,6 +13,9 @@
 //   -run-haproxy   run haproxy binary in check mode and parse
 //                  its output to extract alerts and warnigns
 //
+//   -ignore regexp ignore lines in config file matching given regexp
+//                  (works only for native checks)
+//
 //   -v             show version and exit
 package main
 
@@ -26,7 +29,7 @@ import (
 	"github.com/abulimov/haproxy-lint/lib"
 )
 
-var version = "0.4.0"
+var version = "0.4.1"
 
 func myUsage() {
 	fmt.Printf("Usage: %s [OPTIONS] haproxy.cfg\n", os.Args[0])
@@ -37,6 +40,7 @@ func main() {
 	jsonFlag := flag.Bool("json", false, "Output in json")
 	haproxyFlag := flag.Bool("run-haproxy", true, "Try to run HAProxy binary in check mode")
 	versionFlag := flag.Bool("version", false, "print haproxy-lint version and exit")
+	ignoreFlag := flag.String("ignore", "", "ignore lines in config file matching this regexp")
 
 	flag.Usage = myUsage
 
@@ -67,6 +71,11 @@ func main() {
 	config, err := lib.ReadConfigFile(filePath)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	// if we need to strip some strings from config (for example, Jinja2 conditionals)
+	if *ignoreFlag != "" {
+		config = lib.Filter(config, *ignoreFlag)
 	}
 
 	sections := lib.GetSections(config)

@@ -45,6 +45,10 @@ with `--json`flag (useful for editor plugins integration).
 Also you can manually disable running local HAProxy binary in check mode with
 `--run-haproxy=false` flag.
 
+If the config you are checking will be later processed by some template engine,
+you can tell haproxy-lint to exclude some lines in config file based on regexp
+pattern (works only for native checks) with `--ignore='some_regexp'` flag.
+
 ```console
 haproxy-lint /etc/haproxy/haproxy.cfg
 24:0:warning: ACL h_some declared but not used

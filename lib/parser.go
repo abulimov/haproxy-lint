@@ -4,6 +4,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -13,6 +14,7 @@ func ReadConfig(f io.Reader) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return strings.Split(string(b), "\n"), nil
 }
 
@@ -40,4 +42,23 @@ func GetUsage(keyword, line string) string {
 		}
 	}
 	return ""
+}
+
+// Filter helps us replace lines matching pattern with empty strings.
+// Helpfull when we are trying to strip some template engine conditionals.
+func Filter(lines []string, pattern string) []string {
+	var result []string
+	if pattern == "" {
+		return lines
+	}
+
+	re := regexp.MustCompile(pattern)
+	for _, line := range lines {
+		if re.MatchString(line) {
+			result = append(result, "")
+		} else {
+			result = append(result, line)
+		}
+	}
+	return result
 }

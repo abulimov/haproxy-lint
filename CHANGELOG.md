@@ -1,3 +1,7 @@
+## v0.4.1 [2016-04-18]
+
+- Added ability to exclude some config lines based on regexp
+
 ## v0.4.0 [2016-04-08]
 
 - Execute checks in parallel

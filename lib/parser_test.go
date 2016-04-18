@@ -1,6 +1,9 @@
 package lib
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestGetUsage(t *testing.T) {
 	tests := []struct {
@@ -46,6 +49,60 @@ func TestGetUsage(t *testing.T) {
 	for _, tt := range tests {
 		if got := GetUsage(tt.keyword, tt.line); got != tt.want {
 			t.Errorf("%q. GetUsage() = %v, want %v", tt.name, got, tt.want)
+		}
+	}
+}
+
+func TestFilter(t *testing.T) {
+	tests := []struct {
+		// Test description.
+		name string
+		// Parameters.
+		lines   []string
+		pattern string
+		// Expected results.
+		want []string
+	}{
+		{
+			name: "File without lines to filter",
+			lines: []string{
+				"global",
+				"    daemon",
+				"    maxconn 256",
+			},
+			pattern: "{%",
+			want: []string{
+				"global",
+				"    daemon",
+				"    maxconn 256",
+			},
+		},
+		{
+			name: "File with lines to filter",
+			lines: []string{
+				"global",
+				"    daemon",
+				"    {% if haproxy_domain == 'ru' %}",
+				"    maxconn 1024",
+				"    {% else %}",
+				"    maxconn 256",
+				"    {% endif %}",
+			},
+			pattern: "{%",
+			want: []string{
+				"global",
+				"    daemon",
+				"",
+				"    maxconn 1024",
+				"",
+				"    maxconn 256",
+				"",
+			},
+		},
+	}
+	for _, tt := range tests {
+		if got := Filter(tt.lines, tt.pattern); !reflect.DeepEqual(got, tt.want) {
+			t.Errorf("%q. Filter() = %v, want %v", tt.name, got, tt.want)
 		}
 	}
 }
