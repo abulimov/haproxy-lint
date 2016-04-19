@@ -45,6 +45,11 @@ func TestParseHaproxyLine(t *testing.T) {
 			line: "[ALERT] 098/131824 (13707) : Proxy 'secured': no SSL certificate specified for bind ':443' at [/tmp/tmp.cfg:34] (use 'crt').",
 			want: &Problem{Line: 34, Col: 0, Severity: "critical", Message: "Proxy 'secured': no SSL certificate specified for bind ':443'"},
 		},
+		{
+			name: "User id problem",
+			line: "[ALERT] 109/150357 (97550) : parsing [/tmp/tmp.cfg:8] : cannot find user id for 'haproxy' (0:Undefined error: 0)",
+			want: nil,
+		},
 	}
 	for _, tt := range tests {
 		if got := ParseHaproxyLine(tt.line); !reflect.DeepEqual(got, tt.want) {

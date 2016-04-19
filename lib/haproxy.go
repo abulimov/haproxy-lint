@@ -16,7 +16,7 @@ func ParseHaproxyLine(line string) *Problem {
 		regexp.MustCompile(`\[(?P<severity>\w+)\]\s+\d+\/\d+\s+\(\d+\)\s+:\s+parsing\s\[.+:(?P<line>\d+)\]\s+:\s+(?P<message>.+)`),
 		regexp.MustCompile(`\[(?P<severity>\w+)\]\s+\d+\/\d+\s+\(\d+\)\s+:\s+(?P<message>.+)\s+at\s\[.+:(?P<line>\d+)\]\s+.+`),
 	}
-	stopWords := regexp.MustCompile(`unable to load SSL private key|file`)
+	stopWords := regexp.MustCompile(`unable to load SSL private key|file|cannot find user id for|cannot find group id for`)
 	if stopWords.MatchString(line) {
 		return nil
 	}
