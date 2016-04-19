@@ -20,7 +20,6 @@ or build from source.
 **To get more warnings you need a local HAProxy executable.**
 Install it with [Homebrew](http://brew.sh) on OS X or package manager of your choice on Linux.
 
-
 ### Building from source
 
 You need working Go compiler.
@@ -47,7 +46,7 @@ Also you can manually disable running local HAProxy binary in check mode with
 
 If the config you are checking will be later processed by some template engine,
 you can tell haproxy-lint to exclude some lines in config file based on regexp
-pattern (works only for native checks) with `--ignore='some_regexp'` flag.
+pattern with `--ignore='some_regexp'` flag.
 
 ```console
 haproxy-lint /etc/haproxy/haproxy.cfg

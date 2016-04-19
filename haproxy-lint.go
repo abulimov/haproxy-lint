@@ -14,7 +14,6 @@
 //                  its output to extract alerts and warnigns
 //
 //   -ignore regexp ignore lines in config file matching given regexp
-//                  (works only for native checks)
 //
 //   -v             show version and exit
 package main
@@ -29,11 +28,37 @@ import (
 	"github.com/abulimov/haproxy-lint/lib"
 )
 
-var version = "0.4.1"
+var version = "0.5.0"
 
 func myUsage() {
 	fmt.Printf("Usage: %s [OPTIONS] haproxy.cfg\n", os.Args[0])
 	flag.PrintDefaults()
+}
+
+func checkWithHAProxy(config []string, filePath string, createTempFile bool) ([]lib.Problem, error) {
+	if createTempFile {
+		// we need to create temp file with content
+		tempFilePath, err := lib.CreateTempConfig(config)
+		if err != nil {
+			log.Printf("Failed to create temp file to filter config: %v\n", err)
+		} else {
+			defer os.Remove(tempFilePath) // clean up
+			filePath = tempFilePath
+		}
+	}
+	return lib.RunHAProxyCheck(filePath)
+}
+
+func getConfig(filePath, ignorePattern string) ([]string, error) {
+	config, err := lib.ReadConfigFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	// if we need to strip some strings from config (for example, Jinja2 conditionals)
+	if ignorePattern != "" {
+		return lib.Filter(config, ignorePattern), nil
+	}
+	return config, nil
 }
 
 func main() {
@@ -58,24 +83,22 @@ func main() {
 
 	var problems []lib.Problem
 	useHAProxy := *haproxyFlag
-	if useHAProxy {
-		haproxyProblems, err := lib.RunHAProxyCheck(filePath)
-		if err != nil {
-			log.Println(err)
-			useHAProxy = false
-		} else {
-			problems = append(problems, haproxyProblems...)
-		}
-	}
 
-	config, err := lib.ReadConfigFile(filePath)
+	config, err := getConfig(filePath, *ignoreFlag)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// if we need to strip some strings from config (for example, Jinja2 conditionals)
-	if *ignoreFlag != "" {
-		config = lib.Filter(config, *ignoreFlag)
+	if useHAProxy {
+		createTempFile := *ignoreFlag != ""
+		haproxyProblems, err := checkWithHAProxy(config, filePath, createTempFile)
+		if err != nil {
+			log.Printf("Failed to run HAProxy in check mode: %v\n", err)
+			// don't filter native checks as we failed to run HAProxy
+			useHAProxy = false
+		} else {
+			problems = append(problems, haproxyProblems...)
+		}
 	}
 
 	sections := lib.GetSections(config)

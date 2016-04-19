@@ -1,3 +1,9 @@
+## v0.5.0 [2016-04-19]
+
+- Added ability to exclude some config lines based on regexp for non-native checks
+- Added more filtering for HAProxy output
+- Refactored main func to improve readability
+
 ## v0.4.1 [2016-04-18]
 
 - Added ability to exclude some config lines based on regexp

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"regexp"
 	"strconv"
@@ -81,4 +82,21 @@ func RunHAProxyCheck(filePath string) ([]Problem, error) {
 
 	}
 	return ParseHaproxyOutput(&out)
+}
+
+// CreateTempConfig creates temporary file, containing given lines.
+// If no error returned, this file needs to be removed by the caller.
+func CreateTempConfig(lines []string) (string, error) {
+	tmpfile, err := ioutil.TempFile("", "haproxy-lint")
+	if err != nil {
+		return "", err
+	}
+	for _, line := range lines {
+		_, err := tmpfile.Write([]byte(line + "\n"))
+		if err != nil {
+			os.Remove(tmpfile.Name())
+			return "", err
+		}
+	}
+	return tmpfile.Name(), nil
 }
