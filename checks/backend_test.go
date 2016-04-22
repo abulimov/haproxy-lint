@@ -7,7 +7,7 @@ import (
 )
 
 func TestCheckUnusedBackends(t *testing.T) {
-	lines, err := lib.ReadConfigFile("../testdata/haproxy.cfg")
+	lines, err := lib.GetConfig("../testdata/haproxy.cfg", "")
 	if err != nil {
 		t.Fatalf("Failed to read test data: %v", err)
 	}
@@ -20,7 +20,7 @@ func TestCheckUnusedBackends(t *testing.T) {
 }
 
 func TestCheckUnknownBackends(t *testing.T) {
-	lines, err := lib.ReadConfigFile("../testdata/haproxy.cfg")
+	lines, err := lib.GetConfig("../testdata/haproxy.cfg", "")
 	if err != nil {
 		t.Fatalf("Failed to read test data: %v", err)
 	}

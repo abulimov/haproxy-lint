@@ -33,6 +33,13 @@ func trimNo(line string) string {
 	return strings.TrimSpace(strings.TrimPrefix(trimmed, "no "))
 }
 
+// StripComments returns string without comments and extra spaces
+func StripComments(s string) string {
+	// strip comments
+	re := regexp.MustCompile(`\s*#.*`)
+	return re.ReplaceAllString(s, "")
+}
+
 // GetKeyword returns used keyword
 func GetKeyword(line string) string {
 	trimmed := trimNo(line)
@@ -56,21 +63,28 @@ func GetUsage(keyword, line string) string {
 	return ""
 }
 
-// Filter helps us replace lines matching pattern with empty strings.
+// CleanupConfig helps us replace lines matching pattern with empty strings.
 // Helpfull when we are trying to strip some template engine conditionals.
-func Filter(lines []string, pattern string) []string {
+// This funtion also removes all comments.
+func CleanupConfig(lines []string, pattern string) []string {
 	var result []string
-	if pattern == "" {
-		return lines
-	}
 
 	re := regexp.MustCompile(pattern)
 	for _, line := range lines {
-		if re.MatchString(line) {
+		if pattern != "" && re.MatchString(line) {
 			result = append(result, "")
 		} else {
-			result = append(result, line)
+			result = append(result, StripComments(line))
 		}
 	}
 	return result
+}
+
+// GetConfig is a small wrapper for reading and cleaning up config
+func GetConfig(filePath, ignorePattern string) ([]string, error) {
+	config, err := ReadConfigFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	return CleanupConfig(config, ignorePattern), nil
 }

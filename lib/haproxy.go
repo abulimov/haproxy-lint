@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 	"regexp"
@@ -99,4 +100,19 @@ func CreateTempConfig(lines []string) (string, error) {
 		}
 	}
 	return tmpfile.Name(), nil
+}
+
+// CheckWithHAProxy runs haproxy checks with temporary file creation
+func CheckWithHAProxy(config []string, filePath string, createTempFile bool) ([]Problem, error) {
+	if createTempFile {
+		// we need to create temp file with content
+		tempFilePath, err := CreateTempConfig(config)
+		if err != nil {
+			log.Printf("Failed to create temp file to filter config: %v\n", err)
+		} else {
+			defer os.Remove(tempFilePath) // clean up
+			filePath = tempFilePath
+		}
+	}
+	return RunHAProxyCheck(filePath)
 }

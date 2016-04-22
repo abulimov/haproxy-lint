@@ -35,32 +35,6 @@ func myUsage() {
 	flag.PrintDefaults()
 }
 
-func checkWithHAProxy(config []string, filePath string, createTempFile bool) ([]lib.Problem, error) {
-	if createTempFile {
-		// we need to create temp file with content
-		tempFilePath, err := lib.CreateTempConfig(config)
-		if err != nil {
-			log.Printf("Failed to create temp file to filter config: %v\n", err)
-		} else {
-			defer os.Remove(tempFilePath) // clean up
-			filePath = tempFilePath
-		}
-	}
-	return lib.RunHAProxyCheck(filePath)
-}
-
-func getConfig(filePath, ignorePattern string) ([]string, error) {
-	config, err := lib.ReadConfigFile(filePath)
-	if err != nil {
-		return nil, err
-	}
-	// if we need to strip some strings from config (for example, Jinja2 conditionals)
-	if ignorePattern != "" {
-		return lib.Filter(config, ignorePattern), nil
-	}
-	return config, nil
-}
-
 func main() {
 	jsonFlag := flag.Bool("json", false, "Output in json")
 	haproxyFlag := flag.Bool("run-haproxy", true, "Try to run HAProxy binary in check mode")
@@ -84,14 +58,14 @@ func main() {
 	var problems []lib.Problem
 	useHAProxy := *haproxyFlag
 
-	config, err := getConfig(filePath, *ignoreFlag)
+	config, err := lib.GetConfig(filePath, *ignoreFlag)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	if useHAProxy {
 		createTempFile := *ignoreFlag != ""
-		haproxyProblems, err := checkWithHAProxy(config, filePath, createTempFile)
+		haproxyProblems, err := lib.CheckWithHAProxy(config, filePath, createTempFile)
 		if err != nil {
 			log.Printf("Failed to run HAProxy in check mode: %v\n", err)
 			// don't filter native checks as we failed to run HAProxy

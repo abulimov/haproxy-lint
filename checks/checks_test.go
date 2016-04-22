@@ -7,7 +7,7 @@ import (
 )
 
 func TestRun(t *testing.T) {
-	lines, err := lib.ReadConfigFile("../testdata/haproxy.cfg")
+	lines, err := lib.GetConfig("../testdata/haproxy.cfg", "")
 	if err != nil {
 		t.Fatalf("Failed to read test data: %v", err)
 	}
@@ -20,7 +20,7 @@ func TestRun(t *testing.T) {
 }
 
 func BenchmarkRun(b *testing.B) {
-	lines, err := lib.ReadConfigFile("../testdata/haproxy.cfg")
+	lines, err := lib.GetConfig("../testdata/haproxy.cfg", "")
 	if err != nil {
 		b.Fatalf("Failed to read test data: %v", err)
 	}

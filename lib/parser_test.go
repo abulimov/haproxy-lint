@@ -5,6 +5,38 @@ import (
 	"testing"
 )
 
+func TestStripComments(t *testing.T) {
+	tests := []struct {
+		// Test description.
+		name string
+		// Parameters.
+		s string
+		// Expected results.
+		want string
+	}{
+		{
+			name: "String without comment",
+			s:    "acl h_some hdr(Host) -i some.example.com",
+			want: "acl h_some hdr(Host) -i some.example.com",
+		},
+		{
+			name: "String with comment",
+			s:    "acl h_some hdr(Host) -i some.example.com # comment",
+			want: "acl h_some hdr(Host) -i some.example.com",
+		},
+		{
+			name: "Just comment",
+			s:    "#only comment",
+			want: "",
+		},
+	}
+	for _, tt := range tests {
+		if got := StripComments(tt.s); got != tt.want {
+			t.Errorf("%q. StripComments() = %v, want %v", tt.name, got, tt.want)
+		}
+	}
+}
+
 func TestGetUsage(t *testing.T) {
 	tests := []struct {
 		// Test description.
@@ -53,7 +85,7 @@ func TestGetUsage(t *testing.T) {
 	}
 }
 
-func TestFilter(t *testing.T) {
+func TestCleanupConfig(t *testing.T) {
 	tests := []struct {
 		// Test description.
 		name string
@@ -101,7 +133,7 @@ func TestFilter(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		if got := Filter(tt.lines, tt.pattern); !reflect.DeepEqual(got, tt.want) {
+		if got := CleanupConfig(tt.lines, tt.pattern); !reflect.DeepEqual(got, tt.want) {
 			t.Errorf("%q. Filter() = %v, want %v", tt.name, got, tt.want)
 		}
 	}

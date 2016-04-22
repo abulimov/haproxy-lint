@@ -1,9 +1,6 @@
 package lib
 
-import (
-	"regexp"
-	"strings"
-)
+import "strings"
 
 // Sections is a list of all possible section names in HAProxy config
 var Sections = [...]string{
@@ -22,14 +19,6 @@ type Section struct {
 	Content map[int]string
 }
 
-// StripComments returns string without comments and extra spaces
-func StripComments(s string) string {
-	// strip comments
-	re := regexp.MustCompile("#.*")
-	replaced := re.ReplaceAllString(s, "")
-	return strings.TrimSpace(replaced)
-}
-
 func isSectionDelimiter(s string) bool {
 	for _, prefix := range Sections {
 		if strings.HasPrefix(s, prefix) {
@@ -44,7 +33,7 @@ func isSection(s, section string) bool {
 }
 
 func getSectionName(s string) string {
-	splitted := strings.Fields(StripComments(s))
+	splitted := strings.Fields(s)
 	if len(splitted) > 1 {
 		return splitted[1]
 	}

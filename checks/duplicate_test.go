@@ -7,7 +7,7 @@ import (
 )
 
 func TestCheckDuplicates(t *testing.T) {
-	lines, err := lib.ReadConfigFile("../testdata/haproxy.cfg")
+	lines, err := lib.GetConfig("../testdata/haproxy.cfg", "")
 	if err != nil {
 		t.Fatalf("Failed to read test data: %v", err)
 	}

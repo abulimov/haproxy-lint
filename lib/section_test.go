@@ -2,38 +2,6 @@ package lib
 
 import "testing"
 
-func TestStripComments(t *testing.T) {
-	tests := []struct {
-		// Test description.
-		name string
-		// Parameters.
-		s string
-		// Expected results.
-		want string
-	}{
-		{
-			name: "String without comment",
-			s:    "acl h_some hdr(Host) -i some.example.com",
-			want: "acl h_some hdr(Host) -i some.example.com",
-		},
-		{
-			name: "String with comment",
-			s:    "acl h_some hdr(Host) -i some.example.com # comment",
-			want: "acl h_some hdr(Host) -i some.example.com",
-		},
-		{
-			name: "Just comment",
-			s:    "#only comment",
-			want: "",
-		},
-	}
-	for _, tt := range tests {
-		if got := StripComments(tt.s); got != tt.want {
-			t.Errorf("%q. StripComments() = %v, want %v", tt.name, got, tt.want)
-		}
-	}
-}
-
 func TestIsSectionDelimiter(t *testing.T) {
 	tests := []struct {
 		// Test description.
@@ -94,7 +62,7 @@ func TestGetSectionName(t *testing.T) {
 }
 
 func TestGetSection(t *testing.T) {
-	lines, err := ReadConfigFile("../testdata/haproxy.cfg")
+	lines, err := GetConfig("../testdata/haproxy.cfg", "")
 	if err != nil {
 		t.Fatalf("Failed to read test data: %v", err)
 	}
@@ -106,7 +74,7 @@ func TestGetSection(t *testing.T) {
 }
 
 func TestGetSections(t *testing.T) {
-	lines, err := ReadConfigFile("../testdata/haproxy.cfg")
+	lines, err := GetConfig("../testdata/haproxy.cfg", "")
 	if err != nil {
 		t.Fatalf("Failed to read test data: %v", err)
 	}

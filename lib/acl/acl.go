@@ -63,7 +63,7 @@ func IsPredefined(acl string) bool {
 func ParseACLs(line string) []*ACL {
 	var acls []*ACL
 	afterIfRE := regexp.MustCompile(`\w+\s+if\s+(.+)`)
-	afterIfMatch := afterIfRE.FindAllStringSubmatch(lib.StripComments(line), -1)
+	afterIfMatch := afterIfRE.FindAllStringSubmatch(line, -1)
 	if len(afterIfMatch) > 0 {
 		if len(afterIfMatch[0]) > 1 {
 			afterIfString := afterIfMatch[0][1]
@@ -111,7 +111,7 @@ func GetNameFromDeclaration(l string) string {
 
 // LineUsesACL checks if given line uses given acl
 func LineUsesACL(acl, line string) bool {
-	return strings.Contains(lib.StripComments(line), acl)
+	return strings.Contains(line, acl)
 }
 
 // In checks if second list of acls contains first
