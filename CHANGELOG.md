@@ -1,8 +1,8 @@
-## Unreleased
+## v0.6.0 [2016-04-22]
 
 - Refactoring - moved all generic functions from checks to lib/acl and lib/backend
 - New ACL type to keep ACLs negation and other attributes
-
+- Added unreachable rules check
 
 ## v0.5.0 [2016-04-19]
 

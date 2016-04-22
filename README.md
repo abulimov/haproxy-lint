@@ -98,6 +98,7 @@ executed, as they just duplicate HAProxy's own checks.
 | 005 | warning  | rule order masking real evaluation precedence | no                            |
 | 006 | warning  | duplicate rules found                         | yes                           |
 | 007 | warning  | deprecated keywords found                     | no                            |
+| 008 | warning  | unreachable rule found                        | yes                           |
 
 ## Contributing
 

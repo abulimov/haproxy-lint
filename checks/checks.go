@@ -21,6 +21,7 @@ func Run(sections []*lib.Section, extrasOnly bool) []lib.Problem {
 		{CheckPrecedence, false},
 		{CheckDuplicates, true},
 		{CheckDeprecations, false},
+		{CheckUnreachableRules, true},
 	}
 	var globalChecks = []globCheck{
 		{CheckUnusedBackends, true},

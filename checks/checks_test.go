@@ -14,8 +14,8 @@ func TestRun(t *testing.T) {
 	sections := lib.GetSections(lines)
 	problems := Run(sections, false)
 
-	if len(problems) != 9 {
-		t.Errorf("Expected %d problems, got %d", 9, len(problems))
+	if len(problems) != 11 {
+		t.Errorf("Expected %d problems, got %d", 11, len(problems))
 	}
 }
 
