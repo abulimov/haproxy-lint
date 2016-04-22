@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/abulimov/haproxy-lint/lib"
+	B "github.com/abulimov/haproxy-lint/lib/backend"
 )
 
 // CheckUnusedBackends checks if we have declared but not used backends
@@ -22,7 +23,7 @@ func CheckUnusedBackends(sections []*lib.Section) []lib.Problem {
 	for b := range backends {
 		for _, s := range other {
 			for _, line := range s.Content {
-				if usesBackend(b.Name, line) {
+				if B.LineUsesBackend(b.Name, line) {
 					backends[b] = true
 				}
 			}
@@ -44,30 +45,6 @@ func CheckUnusedBackends(sections []*lib.Section) []lib.Problem {
 	return problems
 }
 
-func usesBackend(backend, line string) bool {
-	var keywords = []string{"use_backend", "default_backend"}
-	name := ""
-	for _, kw := range keywords {
-		name = lib.GetUsage(kw, line)
-		if name == backend {
-			return true
-		}
-	}
-	return false
-}
-
-func getBackend(line string) string {
-	var keywords = []string{"use_backend", "default_backend"}
-	name := ""
-	for _, kw := range keywords {
-		name = lib.GetUsage(kw, line)
-		if name != "" {
-			return name
-		}
-	}
-	return ""
-}
-
 func CheckUnknownBackends(sections []*lib.Section) []lib.Problem {
 	var problems []lib.Problem
 	backends := make(map[string]bool)
@@ -82,7 +59,7 @@ func CheckUnknownBackends(sections []*lib.Section) []lib.Problem {
 
 	for _, s := range other {
 		for i, line := range s.Content {
-			backend := getBackend(line)
+			backend := B.GetNameFromDeclaration(line)
 			if backend != "" {
 				if _, found := backends[backend]; !found {
 					problems = append(

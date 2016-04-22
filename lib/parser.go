@@ -28,12 +28,24 @@ func ReadConfigFile(filePath string) ([]string, error) {
 	return ReadConfig(f)
 }
 
+func trimNo(line string) string {
+	trimmed := strings.TrimSpace(line)
+	return strings.TrimSpace(strings.TrimPrefix(trimmed, "no "))
+}
+
+// GetKeyword returns used keyword
+func GetKeyword(line string) string {
+	trimmed := trimNo(line)
+	splitted := strings.Fields(trimmed)
+	if len(splitted) > 0 {
+		return splitted[0]
+	}
+	return ""
+}
+
 // GetUsage returns name of used rule, or "" if line does not contain rule
 func GetUsage(keyword, line string) string {
-	trimmed := strings.TrimSpace(line)
-	if strings.HasPrefix(trimmed, "no ") {
-		trimmed = strings.TrimSpace(strings.TrimPrefix(trimmed, "no "))
-	}
+	trimmed := trimNo(line)
 	if strings.HasPrefix(trimmed, keyword) {
 		rest := strings.TrimPrefix(trimmed, keyword)
 		splitted := strings.Fields(rest)

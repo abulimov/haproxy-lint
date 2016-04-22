@@ -1,3 +1,8 @@
+## Unreleased
+
+- Refactoring - moved all generic functions from checks to lib/acl and lib/backend
+- New ACL type to keep ACLs negation and other attributes
+
 ## v0.5.0 [2016-04-19]
 
 - Added ability to exclude some config lines based on regexp for non-native checks
