@@ -104,6 +104,26 @@ func TestParseACLs(t *testing.T) {
 					Negated:    false,
 					Inline:     false,
 					Predefined: false,
+					Or:         true,
+				},
+			},
+		},
+		{
+			name: "pre-defined acl and '||'",
+			line: "redirect scheme https code 301 if METH_GET || h_missing",
+			want: []*ACL{
+				{
+					Name:       "METH_GET",
+					Negated:    false,
+					Inline:     false,
+					Predefined: true,
+				},
+				{
+					Name:       "h_missing",
+					Negated:    false,
+					Inline:     false,
+					Predefined: false,
+					Or:         true,
 				},
 			},
 		},

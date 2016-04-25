@@ -43,7 +43,7 @@ func CheckUnreachableRules(s *lib.Section) []lib.Problem {
 				// if current keyword is same as in line when this ACL was used
 				if _, ok := checkableKWs[curKW]; ok && curKW == kwMap[prevLine] {
 					// if previous acl line is more generic than current
-					if A.In(aclsMap[prevLine], curACLs) {
+					if A.In(aclsMap[prevLine], curACLs) && !A.HasOrs(curACLs) {
 						problems = append(
 							problems,
 							lib.Problem{
@@ -64,9 +64,10 @@ func CheckUnreachableRules(s *lib.Section) []lib.Problem {
 						)
 					}
 				}
+			} else {
+				// add current acl to used acls map
+				usedACLs[*acl] = i
 			}
-			// add current acl to used acls map
-			usedACLs[*acl] = i
 		}
 	}
 	return problems

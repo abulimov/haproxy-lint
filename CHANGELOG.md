@@ -1,3 +1,8 @@
+## v0.6.1 [2016-04-25]
+
+- Fixed false positive for unreachable rules checks with `or`
+- Fixed missing detection for multiple unreachable rules
+
 ## v0.6.0 [2016-04-22]
 
 - Refactoring - moved all generic functions from checks to lib/acl and lib/backend

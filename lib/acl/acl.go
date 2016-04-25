@@ -14,15 +14,17 @@ type ACL struct {
 	Predefined bool
 	Negated    bool
 	Inline     bool
+	Or         bool
 }
 
 func (a ACL) String() string {
 	return fmt.Sprintf(
-		"Name: %s, Predefined: %t, Negated: %t, Inline: %t",
+		"Name: %s, Predefined: %t, Negated: %t, Inline: %t, Or: %t",
 		a.Name,
 		a.Predefined,
 		a.Negated,
 		a.Inline,
+		a.Or,
 	)
 }
 
@@ -67,21 +69,23 @@ func ParseACLs(line string) []*ACL {
 	if len(afterIfMatch) > 0 {
 		if len(afterIfMatch[0]) > 1 {
 			afterIfString := afterIfMatch[0][1]
-			word := regexp.MustCompile(`({[^}]+}|\w+|!)`)
+			word := regexp.MustCompile(`({[^}]+}|\w+|!|\|{2})`)
 			words := word.FindAllString(afterIfString, -1)
 			negated := false
+			or := false
 			for _, w := range words {
 				switch w {
 				case "!":
 					negated = true
-				case "or":
-					continue
+				case "or", "||":
+					or = true
 				default:
 					acls = append(acls, &ACL{
 						Name:       w,
 						Predefined: IsPredefined(w),
 						Negated:    negated,
 						Inline:     IsInline(w),
+						Or:         or,
 					})
 					negated = false
 				}
@@ -112,6 +116,16 @@ func GetNameFromDeclaration(l string) string {
 // LineUsesACL checks if given line uses given acl
 func LineUsesACL(acl, line string) bool {
 	return strings.Contains(line, acl)
+}
+
+// HasOrs check if some of ACLs are used with OR operator
+func HasOrs(acls []*ACL) bool {
+	for _, a := range acls {
+		if a.Or {
+			return true
+		}
+	}
+	return false
 }
 
 // In checks if second list of acls contains first
