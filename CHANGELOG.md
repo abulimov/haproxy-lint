@@ -1,3 +1,7 @@
+## v0.6.2 [2016-04-26]
+
+- More fixes for detection of unreachable rules with `or`
+
 ## v0.6.1 [2016-04-25]
 
 - Fixed false positive for unreachable rules checks with `or`

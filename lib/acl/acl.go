@@ -128,6 +128,17 @@ func HasOrs(acls []*ACL) bool {
 	return false
 }
 
+// StripOrs removes acl with 'or' before them from list of ACLs
+func StripOrs(acls []*ACL) []*ACL {
+	var result []*ACL
+	for _, a := range acls {
+		if !a.Or {
+			result = append(result, a)
+		}
+	}
+	return result
+}
+
 // In checks if second list of acls contains first
 func In(first, second []*ACL) bool {
 	m := make(map[ACL]bool)

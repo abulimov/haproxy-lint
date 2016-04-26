@@ -42,8 +42,10 @@ func CheckUnreachableRules(s *lib.Section) []lib.Problem {
 			if prevLine, found := usedACLs[*acl]; found {
 				// if current keyword is same as in line when this ACL was used
 				if _, ok := checkableKWs[curKW]; ok && curKW == kwMap[prevLine] {
+					// we need to strip acls with 'or' before them to correctly find shadowing
+					prevACLs := A.StripOrs(aclsMap[prevLine])
 					// if previous acl line is more generic than current
-					if A.In(aclsMap[prevLine], curACLs) && !A.HasOrs(curACLs) {
+					if A.In(prevACLs, curACLs) && !A.HasOrs(curACLs) {
 						problems = append(
 							problems,
 							lib.Problem{
